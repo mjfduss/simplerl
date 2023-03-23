@@ -1,7 +1,6 @@
 {
     "environment_name": "CartPole-v0",
     "num_iterations": 20000,
-    "episodes": 50,
     "initial_collect_steps": 100,
     "collect_steps_per_iteration": 1,
     "replay_buffer_max_length": 100000,
@@ -10,11 +9,9 @@
     "eval_interval": 1000,
     "batch_size": 64,
     "optimizer": "adam",
-    "base_lr": 0.005,
-    "decay_lr": 0.95,    
-    "clipnorm": 10,
+    "learning_rate": 0.001,
     "cfc_params" : {
-        "size":[64,2],
+        "size":[64,16],
         "backbone_activation": "lecun",
         "backbone_dr": 0.2,
         "forget_bias": 2.1,

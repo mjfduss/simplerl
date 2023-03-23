@@ -22,11 +22,9 @@ def make_agent(
                 action_spec,
                 hparams['cfc_params']
             ),
-            optimizer=make_optimizer(hparams),
+            optimizer=make_optimizer(hparams['optimizer'], hparams['learning_rate']),
             td_errors_loss_fn=common.element_wise_squared_loss,
-            train_step_counter=tf.Variable(0),
-            boltzmann_temperature=0.1,
-            epsilon_greedy=None
+            train_step_counter=tf.Variable(0)
         )
     agent.initialize()
 
