@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import tensorflow as tf
 
 from tf_agents.networks import network, q_network, encoding_network
@@ -16,6 +18,7 @@ class QRnnCfcNetwork(network.Network):
         input_tensor_spec,
         action_spec,
         cfc_params: dict,
+        conv_layer_params:Tuple[int,int,int]=None,
         dtype=tf.float32,
         name='QRnnCfcNetwork',
     ):
@@ -26,6 +29,8 @@ class QRnnCfcNetwork(network.Network):
          action_spec: A nest of `tensor_spec.BoundedTensorSpec` representing the
             actions.
         cfc_params: A dictionary of hyperparamters for the Cfc cell
+        conv_layer_params: Optional list of convolution layers parameters, where
+            each item is a length-three tuple indicating (filters, kernel_size, stride).
         dtype: The dtype to use by the layers.
         name: A string representing name of the network.
         """
@@ -42,8 +47,14 @@ class QRnnCfcNetwork(network.Network):
             dtype=dtype,
             name='num_action_project/dense')
     
-        kernel_initializer = tf.compat.v1.variance_scaling_initializer(
-            scale=2.0, mode='fan_in', distribution='truncated_normal')
+        kernel_initializer = tf.keras.initializers.RandomNormal(stddev=0.01)
+        self._input_encoder = encoding_network.EncodingNetwork(
+                input_tensor_spec, 
+                activation_fn=lecun_tanh, 
+                conv_layer_params=conv_layer_params,
+                dtype=dtype, 
+                kernel_initializer=kernel_initializer
+            )
 
         # Create RNN cell
         if cfc_params['size'][1] == 1:
@@ -73,7 +84,7 @@ class QRnnCfcNetwork(network.Network):
         super(QRnnCfcNetwork, self).__init__(
             input_tensor_spec=input_tensor_spec, state_spec=state_spec, name=name)
 
-        self._input_encoder = encoding_network.EncodingNetwork(input_tensor_spec, activation_fn=lecun_tanh, dtype=dtype)
+        
         self._lstm_network = lstm_network
         self._output_encoder = [q_projection]
 

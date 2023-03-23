@@ -24,7 +24,9 @@ def make_agent(
             ),
             optimizer=make_optimizer(hparams),
             td_errors_loss_fn=common.element_wise_squared_loss,
-            train_step_counter=tf.Variable(0)
+            train_step_counter=tf.Variable(0),
+            boltzmann_temperature=0.1,
+            epsilon_greedy=None
         )
     agent.initialize()
 

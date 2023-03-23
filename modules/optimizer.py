@@ -11,4 +11,5 @@ def make_optimizer(hparams: dict):
         else tf.keras.optimizers.RMSprop
     )
     optimizer = opt(learning_rate_fn, clipnorm=hparams["clipnorm"])
-  
+
+    return optimizer

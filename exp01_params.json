@@ -14,7 +14,7 @@
     "decay_lr": 0.95,    
     "clipnorm": 10,
     "cfc_params" : {
-        "size":[64,16],
+        "size":[64,2],
         "backbone_activation": "lecun",
         "backbone_dr": 0.2,
         "forget_bias": 2.1,

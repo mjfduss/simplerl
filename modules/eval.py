@@ -4,7 +4,7 @@ from tf_agents.policies import TFPolicy
 
 
 def compute_avg_reward(
-      environment: tf_py_environment.TFPyEnvironment, 
+      tf_env: tf_py_environment.TFPyEnvironment, 
       policy: TFPolicy, 
       num_episodes=10
     ) -> numpy.float32:
@@ -12,15 +12,15 @@ def compute_avg_reward(
   total_reward = 0.0
   for _ in range(num_episodes):
 
-    policy_state = policy.get_initial_state(environment.batch_size)
-    time_step = environment.reset()
+    observation = policy.get_initial_state(tf_env.batch_size)
+    time_step = tf_env.reset()
     episode_reward = 0.0
 
     while not time_step.is_last():
-      policy_step = policy.action(time_step, policy_state)
-      time_step = environment.step(policy_step.action)
+      policy_step = policy.action(time_step, observation)
+      time_step = tf_env.step(policy_step.action)
       episode_reward += time_step.reward
-      policy_state = policy_step.state
+      observation = policy_step.state
       
     total_reward += episode_reward
 

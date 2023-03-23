@@ -1,27 +1,14 @@
 from __future__ import absolute_import, division, print_function
 
-import base64
-import imageio
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-import PIL.Image
-import pyvirtualdisplay
-import reverb
-import os
-import shutil
 import json
+import pyvirtualdisplay
 
 import tensorflow as tf
 
-from tf_agents.eval import metric_utils
-from tf_agents.metrics import tf_metrics
-
-import modules.eval as eval
 from modules.agent import make_agent
 from modules.environment import make_environments
 from modules.utils import parse_args
-
+from modules.training import run_training_loop
 
 
 if __name__ == "__main__":
@@ -38,11 +25,19 @@ if __name__ == "__main__":
     display = pyvirtualdisplay.Display(visible=0, size=(1400, 900)).start()
 
     # Environments
-    train_env, eval_env, specs = make_environments(hparams['environment_name'])
-    spec_obs, spec_action, spec_reward = specs
+    train_tf_env, eval_tf_env, train_py_env = make_environments(hparams['environment_name'])
     
     # Agent
-    agent = make_agent(train_env.time_step_spec(), spec_obs, spec_action, hparams)
+    agent = make_agent(
+            train_tf_env.time_step_spec(), 
+            train_tf_env.time_step_spec().observation, 
+            train_tf_env.action_spec(), 
+            hparams
+        )
+
+    # Training Loop
+    rewards, training_duration = run_training_loop(agent, train_tf_env, eval_tf_env, train_py_env, hparams)
+
+    print('\n\nTraining Duration:', training_duration)
+    print('Average Reward', sum(rewards) / len(rewards))
     
-    avg_reward = eval.compute_avg_reward(eval_env, agent.policy, hparams['num_eval_episodes'])
-    print('\navg_reward:', avg_reward)
