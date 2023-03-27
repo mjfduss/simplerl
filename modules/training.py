@@ -2,6 +2,8 @@ import numpy
 from timeit import default_timer
 from typing import List, Tuple
 
+import tensorflow as tf
+
 from tf_agents.utils import common
 from tf_agents.environments import PyEnvironment
 from tf_agents.environments.tf_py_environment import TFPyEnvironment
@@ -16,6 +18,12 @@ def run_training_loop(
         train_py_env: PyEnvironment,
         hparams: dict
     ) -> Tuple[List[numpy.float32], float]:
+    # Check tracking
+    tracking = False
+    if hparams['track']:
+        import wandb
+        tracking = True
+
 
     # Optimize by wrapping some of the code in a graph using TF function.
     agent.train = common.function(agent.train)
@@ -59,11 +67,12 @@ def run_training_loop(
         #  and save to the replay server.
         time_step, next_observation = data_collection_driver.run(time_step, observation)
         observation = next_observation
-        
+        train_py_env.render()
         # Sample a batch of data from the replay server and update the agent's network.
         experience, _ = next(replay_iterator)
         train_loss = agent.train(experience).loss
-
+        if tracking:
+            wandb.log({'loss': train_loss})
         step = agent.train_step_counter.numpy()
         
         if step % hparams['log_interval'] == 0:
@@ -74,15 +83,19 @@ def run_training_loop(
             # Evaluate the agent
             print('step = {0}: Evaluating...'.format(step))
             current_avg_reward = avg_reward()
+            current_avg_episode_duration = sum(episode_times) / len(episode_times)
             print('step = {0}: Average Reward = {1}'.format(step, current_avg_reward))
-            print('step = {0}: Average Episode Duration = {1}'.format(step, sum(episode_times) / len(episode_times)))
+            print('step = {0}: Average Episode Duration = {1}'.format(step, current_avg_episode_duration))
             rewards.append(current_avg_reward)
+            if tracking:
+                wandb.log({'avg_reward': current_avg_reward, 'avg_episode_duration': current_avg_episode_duration})
+
 
         episode_duration = default_timer() - episode_start
         episode_times.append(episode_duration)
     
     training_duration = default_timer() - training_start
-
+    
     return (rewards, training_duration)
     
 

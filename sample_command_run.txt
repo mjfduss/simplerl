@@ -1,0 +1,1 @@
+nohup python run_experiment.py --track --hparams test_01_03-23-2023.json > test_01_03-23-2023_STDOUT.txt &

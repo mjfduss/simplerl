@@ -9,15 +9,15 @@
     "eval_interval": 1000,
     "batch_size": 64,
     "optimizer": "adam",
-    "learning_rate": 0.001,
+    "learning_rate": 0.0001,
     "cfc_params" : {
-        "size":[64,16],
+        "size":[64,8],
         "backbone_activation": "lecun",
         "backbone_dr": 0.2,
-        "forget_bias": 2.1,
+        "forget_bias": 1.1,
         "backbone_units": 128,
         "backbone_layers": 2,
-        "weight_decay": 6e-06,
+        "weight_decay": 1e-04,
         "use_mixed": true,
         "no_gate": false
     }

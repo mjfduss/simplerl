@@ -1,1 +1,6 @@
 __pycache__/
+runs
+wandb
+videos
+*_STDOUT.txt
+model_saves

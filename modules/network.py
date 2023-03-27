@@ -57,11 +57,13 @@ class QRnnCfcNetwork(network.Network):
             )
 
         # Create RNN cell
+        create_cell = lambda: MixedCfcCell(units=cfc_params['size'][0], hparams=cfc_params)
+
         if cfc_params['size'][1] == 1:
-            cell = MixedCfcCell(units=cfc_params['size'][0], hparams=cfc_params)
+            cell = create_cell()
         else:
             cell = tf.keras.layers.StackedRNNCells(
-                [MixedCfcCell(units=cfc_params['size'][0], hparams=cfc_params)
+                [create_cell()
                     for _ in range(0, cfc_params['size'][1])])
             
             lstm_network = dynamic_unroll_layer.DynamicUnroll(cell)
@@ -147,7 +149,6 @@ class QRnnCfcNetwork(network.Network):
 
             if not has_time_dim:
                 # Remove time dimension from the state.
-                state = tf.squeeze(state, [1])
+                state = tf.squeeze(state, [1])            
 
         return state, network_state
-

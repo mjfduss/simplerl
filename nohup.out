@@ -1,0 +1,45 @@
+2023-03-24 10:12:09.357968: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-03-24 10:12:09.951191: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/ftn0813/miniconda3/envs/tf/lib/
+2023-03-24 10:12:09.951258: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/ftn0813/miniconda3/envs/tf/lib/
+2023-03-24 10:12:09.951267: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2023-03-24 10:12:11.036710: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2023-03-24 10:12:11.036964: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2023-03-24 10:12:11.040802: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2023-03-24 10:12:11.041014: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2023-03-24 10:12:11.041200: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2023-03-24 10:12:11.041379: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+
+
+
+tf version: 2.11.0
+[PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU'), PhysicalDevice(name='/physical_device:GPU:1', device_type='GPU')] 
+
+
+Traceback (most recent call last):
+  File "/home/ftn0813/projects/simplerl/run_experiment.py", line 49, in <module>
+    agent = make_agent(
+  File "/home/ftn0813/projects/simplerl/modules/agent.py", line 20, in make_agent
+    q_network=QRnnCfcNetwork(
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/tf_agents/networks/network.py", line 101, in _capture_init
+    init(self, **kwargs)
+  File "/home/ftn0813/projects/simplerl/modules/network.py", line 51, in __init__
+    self._input_encoder = encoding_network.EncodingNetwork(
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/gin/config.py", line 1605, in gin_wrapper
+    utils.augment_exception_message_and_reraise(e, err_str)
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/gin/utils.py", line 41, in augment_exception_message_and_reraise
+    raise proxy.with_traceback(exception.__traceback__) from None
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/gin/config.py", line 1582, in gin_wrapper
+    return fn(*new_args, **new_kwargs)
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/tf_agents/networks/network.py", line 101, in _capture_init
+    init(self, **kwargs)
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/tf_agents/networks/encoding_network.py", line 192, in __init__
+    flat_preprocessing_layers = [
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/tf_agents/networks/encoding_network.py", line 193, in <listcomp>
+    _copy_layer(layer) for layer in tf.nest.flatten(preprocessing_layers)
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/tf_agents/networks/encoding_network.py", line 76, in _copy_layer
+    return type(layer).from_config(layer.get_config())
+  File "/home/ftn0813/miniconda3/envs/tf/lib/python3.9/site-packages/keras/engine/base_layer.py", line 860, in from_config
+    return cls(**config)
+TypeError: __init__() got an unexpected keyword argument 'name'
+  In call to configurable 'EncodingNetwork' (<class 'tf_agents.networks.encoding_network.EncodingNetwork'>)

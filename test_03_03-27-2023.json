@@ -1,0 +1,24 @@
+{
+    "environment_name": "MountainCarContinuous-v0",
+    "num_iterations": 20000,
+    "initial_collect_steps": 100,
+    "collect_steps_per_iteration": 1,
+    "replay_buffer_max_length": 100000,
+    "log_interval": 200,
+    "num_eval_episodes": 10,
+    "eval_interval": 1000,
+    "batch_size": 64,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "cfc_params" : {
+        "size":[64,8],
+        "backbone_activation": "lecun",
+        "backbone_dr": 0.2,
+        "forget_bias": 2.1,
+        "backbone_units": 128,
+        "backbone_layers": 2,
+        "weight_decay": 6e-06,
+        "use_mixed": true,
+        "no_gate": false
+    }
+}
