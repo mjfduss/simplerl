@@ -7,6 +7,7 @@ import tensorflow as tf
 from tf_agents.utils import common
 from tf_agents.environments import PyEnvironment
 from tf_agents.environments.tf_py_environment import TFPyEnvironment
+from tf_agents.policies.py_tf_eager_policy import PyTFEagerPolicy
 
 from modules.eval import compute_avg_reward
 from modules.data_collection import create_data_collection_driver
@@ -40,14 +41,15 @@ def run_training_loop(
     time_step = train_py_env.reset()
 
     # Get the initial state of the agent
-    observation = agent.policy.get_initial_state(train_tf_env.batch_size)
+    policy = PyTFEagerPolicy(agent.collect_policy, use_tf_function=True)
+    observation = policy.get_initial_state(train_tf_env.batch_size)
 
     # Setup the main data collection
     data_collection_driver, replay_iterator = create_data_collection_driver(
             agent=agent,
             train_tf_env=train_tf_env,
             train_py_env=train_py_env,
-            collect_policy=agent.collect_policy,
+            policy=policy,
             collect_steps_per_iteration=hparams['collect_steps_per_iteration'],
             initial_collection_steps=hparams['initial_collect_steps'],
             batch_size=hparams['batch_size'],
@@ -65,9 +67,10 @@ def run_training_loop(
 
         # Run the agent through the number steps set in hparams['collect_steps_per_iteration']
         #  and save to the replay server.
-        time_step, next_observation = data_collection_driver.run(time_step, observation)
+        next_time_step, next_observation = data_collection_driver.run(time_step, observation)
+        time_step = next_time_step
         observation = next_observation
-        train_py_env.render()
+        
         # Sample a batch of data from the replay server and update the agent's network.
         experience, _ = next(replay_iterator)
         train_loss = agent.train(experience).loss

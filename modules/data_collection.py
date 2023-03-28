@@ -4,7 +4,6 @@ from tf_agents.drivers.py_driver import PyDriver
 from tf_agents.policies.py_tf_eager_policy import PyTFEagerPolicy
 from tf_agents.environments import PyEnvironment
 from tf_agents.environments.tf_py_environment import TFPyEnvironment
-from tf_agents.policies import TFPolicy
 
 from modules.replay import start_replay_server
 
@@ -12,7 +11,7 @@ def create_data_collection_driver(
             agent,
             train_tf_env: TFPyEnvironment,
             train_py_env: PyEnvironment,
-            collect_policy: TFPolicy,
+            policy: PyTFEagerPolicy,
             collect_steps_per_iteration: int,
             initial_collection_steps: int,
             batch_size: int,
@@ -25,7 +24,7 @@ def create_data_collection_driver(
     # Create the controller for the agent in the environment
     driver = lambda max_steps: PyDriver(
                                     env=train_py_env,
-                                    policy=PyTFEagerPolicy(collect_policy, use_tf_function=True),
+                                    policy=policy,
                                     observers=[replay_server_observer],
                                     max_steps=max_steps
                                 )
