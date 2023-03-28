@@ -63,7 +63,7 @@ if __name__ == "__main__":
     
     if args.track:
         # Create Plot
-        create_rewards_chart(wandb, hparams['num_iterations'], hparams['eval_interval'], rewards)
+        #create_rewards_chart(wandb, hparams['num_iterations'], hparams['eval_interval'], rewards)
 
         # Create Video
         create_policy_eval_video(wandb, agent.policy, f"videos/{experiment_name}_trained-agent", eval_tf_env, eval_py_env)

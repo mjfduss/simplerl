@@ -32,8 +32,8 @@ def create_data_collection_driver(
     # Populate the Replay server with an initial set of game plays
     print("\nPopulating the Replay server with an initial set of {} environment steps".format(initial_collection_steps))
     time_step = train_py_env.reset()
-    policy_state = agent.policy.get_initial_state(train_tf_env.batch_size)
-    driver(initial_collection_steps).run(time_step, policy_state)
+    observation = policy.get_initial_state(train_tf_env.batch_size)
+    driver(initial_collection_steps).run(time_step, observation)
 
     # Create the main driver to be used during training
     data_collection_driver = driver(collect_steps_per_iteration)

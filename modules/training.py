@@ -19,7 +19,7 @@ def run_training_loop(
         train_py_env: PyEnvironment,
         hparams: dict
     ) -> Tuple[List[numpy.float32], float]:
-    # Check tracking
+    # Check wandb tracking
     tracking = False
     if hparams['track']:
         import wandb
@@ -70,12 +70,17 @@ def run_training_loop(
         next_time_step, next_observation = data_collection_driver.run(time_step, observation)
         time_step = next_time_step
         observation = next_observation
+
+        if tracking:
+            wandb.log({'reward': time_step.reward})
         
         # Sample a batch of data from the replay server and update the agent's network.
         experience, _ = next(replay_iterator)
         train_loss = agent.train(experience).loss
+        
         if tracking:
             wandb.log({'loss': train_loss})
+
         step = agent.train_step_counter.numpy()
         
         if step % hparams['log_interval'] == 0:
