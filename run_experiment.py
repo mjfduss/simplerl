@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 import json
 import pyvirtualdisplay
+#import pygad
 
 import tensorflow as tf
 
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     else:
         hparams['track'] = False
 
-    rewards = experiment_runner(hparams)
+    rewards, agent = experiment_runner(hparams)
 
     # Save Agent Policy
     policy_saver.PolicySaver(agent.policy, batch_size=hparams['batch_size']).save(

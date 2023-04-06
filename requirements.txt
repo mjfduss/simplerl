@@ -1,3 +1,5 @@
 tf_agents[reverb]
+pyvirtualdisplay
 wandb
 plotly
+pygad
