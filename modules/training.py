@@ -82,7 +82,8 @@ def run_training_loop(
 
         if step % hparams['log_interval'] == 0:
             # Log progress to console
-            print('step = {0}: loss = {1}'.format(step, train_loss))
+            print('step = {0}: loss = {1}; reward = {2}'.format(
+                step, train_loss, time_step.reward))
 
     training_duration = default_timer() - training_start
 

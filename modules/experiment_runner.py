@@ -27,4 +27,4 @@ def experiment_runner(hparams: dict):
     print('\n\nTraining Duration:', training_duration)
     print('Average Reward', sum(rewards) / len(rewards))
 
-    return (rewards, agent)
+    return (rewards, agent, eval_tf_env, eval_py_env)

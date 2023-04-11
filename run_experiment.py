@@ -43,7 +43,7 @@ if __name__ == "__main__":
     else:
         hparams['track'] = False
 
-    rewards, agent = experiment_runner(hparams)
+    rewards, agent, eval_tf_env, eval_py_env = experiment_runner(hparams)
 
     # Save Agent Policy
     policy_saver.PolicySaver(agent.policy, batch_size=hparams['batch_size']).save(
